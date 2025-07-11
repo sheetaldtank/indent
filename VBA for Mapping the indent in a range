@@ -1,0 +1,64 @@
+Sub MatchIndentToEoffice()
+    Dim indentSheet As Worksheet
+    Dim dataSheet As Worksheet
+    Dim lastIndentRow As Long
+    Dim lastDataRow As Long
+    Dim i As Long, j As Long
+    Dim indentValue As String
+    Dim indentList As Variant
+    Dim eofficeVal As String
+    Dim foundMatch As Boolean
+
+    Set indentSheet = ThisWorkbook.Sheets("Sheet1") ' Change to your actual sheet name
+    Set dataSheet = ThisWorkbook.Sheets("Sheet2")   ' Change to your actual sheet name
+
+    lastIndentRow = indentSheet.Cells(indentSheet.Rows.Count, 1).End(xlUp).Row
+    lastDataRow = dataSheet.Cells(dataSheet.Rows.Count, 1).End(xlUp).Row
+
+    For i = 2 To lastIndentRow
+        indentValue = Trim(indentSheet.Cells(i, 1).Value)
+        foundMatch = False
+        
+        For j = 2 To lastDataRow
+            indentList = Split(dataSheet.Cells(j, 1).Value, ";")
+            
+            Dim k As Long
+            For k = LBound(indentList) To UBound(indentList)
+                If Trim(indentList(k)) = indentValue Then
+                    indentSheet.Cells(i, 2).Value = dataSheet.Cells(j, 2).Value
+                    foundMatch = True
+                    Exit For
+                End If
+            Next k
+            
+            If foundMatch Then Exit For
+        Next j
+    Next i
+
+    MsgBox "Matching complete.", vbInformation
+End Sub
+
+✅ Step 3: Prepare Your Sheets
+
+Make sure:
+
+    Your Indent Numbers are in Column A of Sheet1
+
+    Your eOffice Data is in two columns (Indents in Column A, eOffice in Column B) in Sheet2
+
+You can adjust sheet names and column references in the code if needed.
+✅ Step 4: Run the Macro
+
+    Press Alt + F8 to open the Macro dialog box
+
+    Select MatchIndentToEoffice
+
+    Click Run
+
+📝 Notes
+
+    The macro writes the matched eOffice detail into Column B of Sheet1 next to the indent.
+
+    You can repeat this anytime by running the macro again.
+
+    You can save this as a .xlsm file (Macro-Enabled Workbook) to retain the macro.
